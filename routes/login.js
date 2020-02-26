@@ -10,7 +10,7 @@ var router = express.Router();
 
 
 //Rutas útiles
-router.post('/save', UserController.save);
+router.post('/saveUser', UserController.save);
 router.get('/getUser/:correo/:password', UserController.getUser);
 
 module.exports = router;

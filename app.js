@@ -9,6 +9,7 @@ var app = express();
 
 //Cargar Ficheros Rutas
 var login_routes = require('./routes/login');
+var producto_routes = require('./routes/producto_routes');
 
 //Cargar Middlewares
 app.use(bodyParser.urlencoded({extended:false}));
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 //Añadir prefijos a rutas / Cargar rutas
 
 app.use('/api', login_routes);
+app.use('/api', producto_routes);
 
 //Exportar el módulo (fichero actual)
 module.exports = app;
