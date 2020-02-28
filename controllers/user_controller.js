@@ -13,7 +13,7 @@ var controller = {
         var params = req.body;
         //Validar datos (validator)
         try{
-            var validate_correo = !validator.isEmpty(params.correo);
+            var validate_correo = validator.isEmail(params.correo);
             var validate_password = !validator.isEmpty(params.password);
         }catch(err){
             return res.status(210).send({
@@ -45,10 +45,17 @@ var controller = {
             });
             
         }else{
-            return res.status(200).send({
-                status: 'error',
-                message: 'Los datos no son válidos'
-            });
+            if(!validate_correo){
+                return res.status(210).send({
+                    status: 'error',
+                    message: 'Correo no válido.'
+                });
+            }else{
+                return res.status(210).send({
+                    status: 'error',
+                    message: 'Contraseña no válida.'
+                });
+            }
         }
         
     },

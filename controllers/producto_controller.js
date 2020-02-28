@@ -2,10 +2,43 @@
 
 var validator = require('validator');
 var Producto = require('../models/producto');
+var fs = require('fs');
+var path = require('path');
 
 var controller = {
 
     save: (req, res) => {
+        //Recoger fichero de la petición
+        var file_name = 'Imagen no subida';
+
+        if(!req.files){
+            return res.status(404).send({
+                status: 'error',
+                message: file_name
+            });
+        }
+
+        //Conseguir el nombre y la extensión
+        var file_path = req.files.file0.path; //<------Path
+        var file_split = file_path.split('\\');
+
+        // Nombre del archivo
+        var file_name = file_split[2];// <-------------Nombre 
+        //Extensión del archivo
+        var extension_split = file_name.split('\.');
+        var file_ext = extension_split[1]; // <--------Extensión
+
+        //Comprobar la extensión
+
+        if(file_ext != 'png' && file_ext!='jpg' && file_ext != 'jpeg' && file_ext != 'gif'){
+            //Borrar el archivo
+            fs.unlink(file_path, (err)=>{ // Unlink permite borrar un archivo
+                return res.status(210).send({
+                    status: 'error',
+                    message: 'La extensión no es válida'
+                });
+            }); 
+        }
         //Recoger parámetros por Post
         var params = req.body;
         //Validar datos (validator)
@@ -29,6 +62,8 @@ var controller = {
             producto.precio = params.precio;
             producto.cantidad = params.cantidad;
             producto.descripcion = params.descripcion;
+            producto.imagen = file_name;
+            producto.estado = "A"; //Por defecto estará activo 
             //Consulta a MongoDB para sacar el correlativo (Código de producto)
 
             Producto.findOne({}, (err, ultimoProducto) => {
@@ -56,13 +91,45 @@ var controller = {
 
 
         } else {
-            return res.status(200).send({
+            return res.status(210).send({
                 status: 'error',
                 message: 'Los datos no son válidos'
             });
         }
 
     },
+
+    getProductos: (req, res) =>{
+        Producto.find({}, (err, productos)=>{
+            if(err || productos.length <= 0){
+                return res.status(210).send({
+                    status: 'error',
+                    message: 'No se encontraron productos'
+                });
+            }else{
+                return res.status(200).send({
+                    status:'success',
+                    productos
+                })
+            }
+        });
+    },
+
+    getImage: (req, res) => {
+        var file = req.params.imagen;
+        var path_file = './upload/productos/'+file;
+
+        fs.exists(path_file, (exists)=>{
+            if(exists){
+                return res.sendFile(path.resolve(path_file));
+            }else{
+                return res.status(404).send({
+                    status: 'error',
+                    message: 'La imagen no existe!!!'
+                });
+            }
+        });
+    }
 }; // end controller
 
 module.exports = controller;
