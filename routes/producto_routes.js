@@ -12,5 +12,6 @@ var md_upload = multipart({uploadDir: './upload/productos'});
 router.post('/saveProducto', md_upload, ProductoController.save);
 router.get('/get-image-producto/:imagen', ProductoController.getImage);
 router.get('/get-productos', ProductoController.getProductos);
+router.post('/update-producto/:id', md_upload, ProductoController.updateProducto);
 
 module.exports = router;
