@@ -13,5 +13,6 @@ router.post('/saveProducto', md_upload, ProductoController.save);
 router.get('/get-image-producto/:imagen', ProductoController.getImage);
 router.get('/get-productos', ProductoController.getProductos);
 router.post('/update-producto/:id', md_upload, ProductoController.updateProducto);
+router.post('/update-producto-cantidad/:id', ProductoController.updateProductoCantidad);
 
 module.exports = router;

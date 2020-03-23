@@ -208,6 +208,54 @@ var controller = {
             }
         }
     },
+    updateProductoCantidad: (req, res) => {
+        var id = req.params.id;
+        var params = req.body;
+        ///////////////////Validar datos (validator)////////////
+        try {
+            var validate_cantidad = !validator.isEmpty(params.cantidad);
+        } catch (err) {
+            return res.status(210).send({
+                status: 'error',
+                mensaje: 'Faltan datos por enviar.'
+            });
+        }
+        ///////////////////Validar datos (validator)////////////
+        if (validate_cantidad) {
+            Producto.findOne({ _id: id }, (err, producto) => {
+                if (err || producto == null) {
+                    return res.status(210).send({
+                        status: 'error',
+                        message: 'No existe el producto!!!'
+                    });
+                } else {
+                    Producto.findOneAndUpdate({ _id: id },
+                        {
+                            cantidad: params.cantidad,
+                        },
+                        { new: true }, (err, producto) => { // { new : true} devuelve el objeto ya actualizado
+                            if (err || producto == null) {
+                                return res.status(210).send({
+                                    status: 'error',
+                                    message: 'No existe el producto!!!'
+                                });
+                            } else {
+                                return res.status(200).send({
+                                    status: 'success',
+                                    producto
+                                })
+                            }
+                        }
+                    );
+                }
+            });
+        } else {
+            return res.status(210).send({
+                status: 'error',
+                message: 'Los datos no son válidos!!!'
+            });
+        }
+    }
 
 }; // end controller
 
