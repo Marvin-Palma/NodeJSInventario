@@ -10,6 +10,7 @@ var app = express();
 //Cargar Ficheros Rutas
 var login_routes = require('./routes/login');
 var producto_routes = require('./routes/producto_routes');
+var factura_routes = require('./routes/factura_routes');
 
 //Cargar Middlewares
 app.use(bodyParser.urlencoded({extended:false}));
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 
 app.use('/api', login_routes);
 app.use('/api', producto_routes);
+app.use('/api', factura_routes);
 
 //Exportar el módulo (fichero actual)
 module.exports = app;

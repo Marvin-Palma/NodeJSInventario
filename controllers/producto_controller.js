@@ -213,7 +213,7 @@ var controller = {
         var params = req.body;
         ///////////////////Validar datos (validator)////////////
         try {
-            var validate_cantidad = !validator.isEmpty(params.cantidad);
+            var validate_cantidad = !validator.isEmpty(params.cantidad.toString());
         } catch (err) {
             return res.status(210).send({
                 status: 'error',
