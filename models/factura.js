@@ -8,7 +8,7 @@ var FacturaSchema = Schema({
     nit: String,
     productos: Array,
     fecha: String,
-    codigo: String,
+    codigo: Number,
     estado: String
 });
 
